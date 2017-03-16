@@ -2194,11 +2194,40 @@ initialize the disk label if installing to a brand new hard drive.
 zfcp
 ----
 
+Define a Fibre channel device. This option only applies on IBM System z.
+Since RHEL 7.4, specifying an FCP devices bus-ID is sufficient if automatic
+LUN scanning is available. Otherwise all three parameters are required.
+
+``zfcp --devnum=<devnum> [--wwpn=<wwpn> --fcplun=<lun>]``
+
+Automatic LUN scanning is available for FCP devices operating in NPIV mode
+if it is not disabled through the zfcp.allow_lun_scan module parameter
+(enabled by default).
+
+Automatic LUN scanning provides access to all SCSI devices, that is, WWPNs
+and FCP LUNs, found in the storage area network attached to the FCP device
+with the specified bus-ID.
+
 ``--devnum=``
+
+    The device number (zFCP adaptor device bus-ID).
+
+``--wwpn=``
+
+    The device's World Wide Port Name (WWPN). Takes the form of a
+    16-digit number, preceded by 0x.
 
 ``--fcplun=``
 
-``--wwpn=``
+    The device's Logical Unit Number (LUN). Takes the form of a
+    16-digit number, preceded by 0x.
+
+For example:
+
+::
+
+   zfcp --devnum=0.0.6000
+   zfcp --devnum=0.0.4000 --wwpn=0x5005076300C213e9 --fcplun=0x5022000000000000
 
 
 %include

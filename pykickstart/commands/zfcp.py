@@ -18,6 +18,7 @@
 # with the express permission of Red Hat, Inc. 
 #
 from pykickstart.base import BaseData, KickstartCommand
+from pykickstart.errors import formatErrorMsg, KickstartValueError
 from pykickstart.options import KSOptionParser
 
 import gettext
@@ -73,6 +74,7 @@ class F12_ZFCPData(FC3_ZFCPData):
         self.deleteRemovedAttrs()
 
 F14_ZFCPData = F12_ZFCPData
+RHEL7_ZFCPData = F14_ZFCPData
 
 class FC3_ZFCP(KickstartCommand):
     removedKeywords = KickstartCommand.removedKeywords
@@ -138,3 +140,24 @@ class F14_ZFCP(F12_ZFCP):
         op.remove_option("--scsiid")
         op.remove_option("--scsilun")
         return op
+
+class RHEL7_ZFCP(F14_ZFCP):
+    removedKeywords = F14_ZFCP.removedKeywords
+    removedAttrs = F14_ZFCP.removedAttrs
+
+    def _getParser(self):
+        op = F14_ZFCP._getParser(self)
+        # --devnum stays required
+        op.add_option("--wwpn", default="", required=0)
+        op.add_option("--fcplun", default="", required=0)
+        return op
+
+    def parse(self, args):
+        data = F14_ZFCP.parse(self, args)
+
+        if not ((data.devnum != "" and data.wwpn == "" and data.fcplun == "")
+                or (data.devnum != "" and data.wwpn != "" and data.fcplun != "")):
+            msg = _("Only --devnum or --devnum with --wwpn and --fcplun are allowed.")
+            raise KickstartValueError(formatErrorMsg(self.lineno, msg=msg))
+
+        return data

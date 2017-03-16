@@ -90,7 +90,7 @@ class RHEL7Handler(BaseHandler):
         "volgroup": commands.volgroup.RHEL7_VolGroup,
         "xconfig": commands.xconfig.F14_XConfig,
         "zerombr": commands.zerombr.F9_ZeroMbr,
-        "zfcp": commands.zfcp.F14_ZFCP,
+        "zfcp": commands.zfcp.RHEL7_ZFCP,
     }
 
     dataMap = {
@@ -111,5 +111,5 @@ class RHEL7Handler(BaseHandler):
         "SshPwData": commands.sshpw.RHEL7_SshPwData,
         "UserData": commands.user.F19_UserData,
         "VolGroupData": commands.volgroup.RHEL7_VolGroupData,
-        "ZFCPData": commands.zfcp.F14_ZFCPData,
+        "ZFCPData": commands.zfcp.RHEL7_ZFCPData,
     }
